@@ -33,10 +33,14 @@ export class DurationPipe implements PipeTransform {
     const leftOverHours = hours % HOURS_IN_DAY;
 
     if (days < DAYS_IN_YEAR) {
-      return `${days}d ${leftOverHours}h ${leftOverMinutes}min`;
+      return `${days}d ${leftOverHours}h`;
     }
     const years = Math.floor(days / DAYS_IN_YEAR);
     const leftOverDays = days % DAYS_IN_YEAR;
-    return `${years}y ${leftOverDays}d`;
+
+    if (years < 5 || (years === 5 && leftOverDays === 0)) {
+      return `${years}y ${leftOverDays}d`;
+    }
+    return '> 5 years';
   }
 }

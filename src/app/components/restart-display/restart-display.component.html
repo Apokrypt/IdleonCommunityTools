@@ -1,61 +1,47 @@
-<div *ngIf="computedStatus() as status">
-  <mat-grid-list
-    cols="3"
-    rowHeight="217:132"
-    gutterSize="8">
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/feather_generation_card.jpg"
-        [talent]="status.talentSet.featherGeneration" />
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/bonuses_of_orion_card.jpg"
-        [talent]="status.talentSet.bonusesOfOrion" />
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/feather_multiplier_card.jpg"
-        [talent]="status.talentSet.featherMultiplier" />
-    </mat-grid-tile>
+@if (computedStatus(); as status) {
+  <div class="talent-cards">
+    <!-- row 1 -->
+    <!-- <div class="card-row"> -->
+    <talent-card
+      backgroundUrl="img/feather_generation_card.jpg"
+      [talent]="status.talentSet.featherGeneration" />
+    <talent-card
+      backgroundUrl="img/bonuses_of_orion_card.jpg"
+      [talent]="status.talentSet.bonusesOfOrion" />
+    <talent-card
+      backgroundUrl="img/feather_multiplier_card.jpg"
+      [talent]="status.talentSet.featherMultiplier" />
+    <!-- </div> -->
     <!-- row 2 -->
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/feather_cheapener_card.jpg"
-        [talent]="status.talentSet.featherCheapener" />
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/feather_restart_card.jpg"
-        [talent]="status.talentSet.featherRestart"
-        [canChangeLevel]="true"
-        (levelChange)="featherRestartLevel.set($event)" />
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/super_feather_production_card.jpg"
-        [talent]="status.talentSet.superFeatherProduction" />
-    </mat-grid-tile>
+    <!-- <div class="card-row"> -->
+    <talent-card
+      backgroundUrl="img/feather_cheapener_card.jpg"
+      [talent]="status.talentSet.featherCheapener" />
+    <talent-card
+      backgroundUrl="img/feather_restart_card.jpg"
+      [talent]="status.talentSet.featherRestart"
+      [canChangeLevel]="true"
+      (levelChange)="featherRestartLevel.set($event)" />
+    <talent-card
+      backgroundUrl="img/super_feather_production_card.jpg"
+      [talent]="status.talentSet.superFeatherProduction" />
+    <!-- </div> -->
     <!-- row 3 -->
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/shiny_feathers_card.jpg"
-        [talent]="status.talentSet.shinyFeathers"
-        [totalShinyFeathers]="status.totalShinyFeathers" />
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/super_feather_cheapener_card.jpg"
-        [talent]="status.talentSet.superFeatherCheapener" />
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <talent-card
-        backgroundUrl="img/the_great_mega_reset_card.jpg"
-        [talent]="status.talentSet.theGreatMegaReset" />
-    </mat-grid-tile>
-  </mat-grid-list>
+    <!-- <div class="card-row"> -->
+    <talent-card
+      backgroundUrl="img/shiny_feathers_card.jpg"
+      [talent]="status.talentSet.shinyFeathers"
+      [totalShinyFeathers]="status.totalShinyFeathers" />
+    <talent-card
+      backgroundUrl="img/super_feather_cheapener_card.jpg"
+      [talent]="status.talentSet.superFeatherCheapener" />
+    <talent-card
+      backgroundUrl="img/the_great_mega_reset_card.jpg"
+      [talent]="status.talentSet.theGreatMegaReset" />
+    <!-- </div> -->
+  </div>
 
   <div class="feathers-per-second">
     Feathers/s: {{ status.feathersPerSecond }}
   </div>
-</div>
+}
