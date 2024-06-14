@@ -7,21 +7,34 @@ module.exports = {
   },
   rebuildConfig: {},
   makers: [
-    {
-      name: '@electron-forge/maker-squirrel',
-      config: {},
-    },
+    // {
+    //   name: '@electron-forge/maker-squirrel',
+    //   config: {},
+    // },
     {
       name: '@electron-forge/maker-zip',
-      // platforms: ['darwin'],
+      platforms: ['win32', 'darwin', 'linux'],
     },
+    // {
+    //   name: '@electron-forge/maker-deb',
+    //   config: {},
+    // },
+    // {
+    //   name: '@electron-forge/maker-rpm',
+    //   config: {},
+    // },
+  ],
+  publishers: [
     {
-      name: '@electron-forge/maker-deb',
-      config: {},
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
+      name: '@electron-forge/publisher-github', // Example publisher for GitHub releases
+      config: {
+        repository: {
+          owner: 'Apokrypt',
+          name: 'IdleonCommunityTools',
+        },
+        draft: false,
+        prerelease: false,
+      },
     },
   ],
   plugins: [
