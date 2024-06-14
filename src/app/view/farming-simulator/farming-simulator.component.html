@@ -1,0 +1,17 @@
+<div class="farming-crop-container">
+  @for (crop of crops; track crop; let index = $index) {
+    <div class="farming-crop">#{{ index + 1 }}</div>
+  }
+</div>
+
+<div class="farming-seed-container">
+  <!-- [(value)]="null" -->
+  <mat-button-toggle-group [hideSingleSelectionIndicator]="true">
+    <mat-button-toggle [value]="0"> Basic </mat-button-toggle>
+    <mat-button-toggle [value]="1"> Earthy </mat-button-toggle>
+    <mat-button-toggle [value]="2"> Bulbo </mat-button-toggle>
+    <mat-button-toggle [value]="3"> Sushi </mat-button-toggle>
+    <mat-button-toggle [value]="4"> Mushi </mat-button-toggle>
+    <mat-button-toggle [value]="5"> Glassy </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>

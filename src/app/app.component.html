@@ -1,3 +1,14 @@
-<div class="container">
-  <restart-display />
+<div class="navbar">
+  <a
+    class="navbar-item"
+    [routerLink]="['/owl-calculator']">
+    Owl Calculator
+  </a>
+  <a
+    class="navbar-item"
+    [routerLink]="['/farming-simulator']">
+    Farming Simulator
+  </a>
 </div>
+
+<router-outlet></router-outlet>
