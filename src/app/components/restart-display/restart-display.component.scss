@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+
+  .feathers-per-second {
+    color: #fff;
+    padding: 1rem;
+    text-shadow: 0px 1px 4px #000;
+  }
+
+  .feather-generation {
+    background-image: url('../../../../public/img/feather_generation_card.jpg');
+  }
+
+  .bonuses-of-orion {
+    background-image: url('../../../../public/img/bonuses_of_orion_card.jpg');
+  }
+
+  .feather-multiplier {
+    background-image: url('../../../../public/img/feather_multiplier_card.jpg');
+  }
+
+  .feather-cheapener {
+    background-image: url('../../../../public/img/feather_cheapener_card.jpg');
+  }
+
+  .feather-restart {
+    background-image: url('../../../../public/img/feather_restart_card.jpg');
+  }
+
+  .super-feather-production {
+    background-image: url('../../../../public/img/super_feather_production_card.jpg');
+  }
+
+  .shiny-feathers {
+    background-image: url('../../../../public/img/shiny_feathers_card.jpg');
+  }
+
+  .super-feather-cheapener {
+    background-image: url('../../../../public/img/super_feather_cheapener_card.jpg');
+  }
+
+  .the-great-mega-reset {
+    background-image: url('../../../../public/img/the_great_mega_reset_card.jpg');
+  }
+}

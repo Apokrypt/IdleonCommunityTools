@@ -1,0 +1,61 @@
+<div *ngIf="computedStatus() as status">
+  <mat-grid-list
+    cols="3"
+    rowHeight="217:132"
+    gutterSize="8">
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/feather_generation_card.jpg"
+        [talent]="status.talentSet.featherGeneration" />
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/bonuses_of_orion_card.jpg"
+        [talent]="status.talentSet.bonusesOfOrion" />
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/feather_multiplier_card.jpg"
+        [talent]="status.talentSet.featherMultiplier" />
+    </mat-grid-tile>
+    <!-- row 2 -->
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/feather_cheapener_card.jpg"
+        [talent]="status.talentSet.featherCheapener" />
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/feather_restart_card.jpg"
+        [talent]="status.talentSet.featherRestart"
+        [canChangeLevel]="true"
+        (levelChange)="featherRestartLevel.set($event)" />
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/super_feather_production_card.jpg"
+        [talent]="status.talentSet.superFeatherProduction" />
+    </mat-grid-tile>
+    <!-- row 3 -->
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/shiny_feathers_card.jpg"
+        [talent]="status.talentSet.shinyFeathers"
+        [totalShinyFeathers]="status.totalShinyFeathers" />
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/super_feather_cheapener_card.jpg"
+        [talent]="status.talentSet.superFeatherCheapener" />
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <talent-card
+        backgroundUrl="img/the_great_mega_reset_card.jpg"
+        [talent]="status.talentSet.theGreatMegaReset" />
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <div class="feathers-per-second">
+    Feathers/s: {{ status.feathersPerSecond }}
+  </div>
+</div>

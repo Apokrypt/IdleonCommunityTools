@@ -1,0 +1,61 @@
+:root {
+  --talent-card-background-url: '';
+}
+
+:host {
+  --mdc-icon-button-icon-color: #fff;
+  --mdc-icon-button-disabled-icon-color: rgba(26, 27, 31, 0.38);
+  --mdc-icon-button-state-layer-size: 32px;
+  --mdc-icon-button-icon-size: 24px;
+  --mat-icon-button-state-layer-color: #44474e;
+  --mat-icon-button-disabled-state-layer-color: #44474e;
+  --mat-icon-button-ripple-color: rgba(68, 71, 78, 0.12);
+  --mat-icon-button-hover-state-layer-opacity: 0.08;
+  --mat-icon-button-focus-state-layer-opacity: 0.12;
+  --mat-icon-button-pressed-state-layer-opacity: 0.12;
+  --mat-icon-button-touch-target-display: none;
+
+  background-image: var(--talent-card-background-url);
+  background-size: cover;
+  color: #fff;
+  height: 100%;
+  width: 100%;
+  padding: 22% 3% 2%;
+  box-sizing: border-box;
+
+  .card-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    padding: 0.25rem;
+  }
+
+  .card-name {
+    font-weight: 500;
+    text-align: center;
+    min-width: 50px;
+    text-shadow: 0px 1px 4px #000;
+  }
+
+  .card-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-button-group {
+    padding: 0 0.5rem;
+  }
+
+  .card-duration {
+    text-align: center;
+    text-shadow: 0px 1px 4px #000;
+  }
+
+  .card-cost {
+    text-align: center;
+    margin: 0.25rem;
+    text-shadow: 0px 1px 4px #000;
+  }
+}
