@@ -49,7 +49,7 @@ jobs:
           path: ./publish
 
       - name: List files in dist directory
-        run: ls -l ./publish
+        run: ls -l ./publish/zip
 
       - name: Extract version
         id: extract_version
