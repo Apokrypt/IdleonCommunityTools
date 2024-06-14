@@ -48,6 +48,9 @@ jobs:
           name: app-package
           path: ./publish
 
+      - name: List files in dist directory
+        run: ls -l ./publish
+
       - name: Extract version
         id: extract_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
