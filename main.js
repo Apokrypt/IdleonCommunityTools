@@ -11,11 +11,11 @@ const createWindow = () => {
     },
   });
 
-  if (env.toLowerCase() === 'development') {
-    mainWindow.loadURL('http://localhost:4200');
-  } else {
-    mainWindow.loadFile('dist/browser/index.html');
-  }
+  // if (env.toLowerCase() === 'development') {
+  //   mainWindow.loadURL('http://localhost:4200');
+  // } else {
+  mainWindow.loadFile('dist/browser/index.html');
+  // }
 };
 
 app.whenReady().then(() => {

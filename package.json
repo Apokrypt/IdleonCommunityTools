@@ -2,6 +2,10 @@
   "name": "idleon-community-tool",
   "version": "0.0.0",
   "main": "main.js",
+  "author": {
+    "name": "Apokrypt"
+  },
+  "description": "IdleOn tools made by the community member/s",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
