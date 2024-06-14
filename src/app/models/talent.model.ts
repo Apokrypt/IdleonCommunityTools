@@ -31,3 +31,8 @@ export interface ComputedStatus {
   totalShinyFeathers: number;
   talentSet: ComputedTalentSet;
 }
+
+export enum ToggleableTalent {
+  FeatherRestart = 'featherRestart',
+  TheGreatMegaReset = 'theGreatMegaReset',
+}

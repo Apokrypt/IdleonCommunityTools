@@ -2,6 +2,7 @@ import {
   ComputedTalentSet,
   StaticTalent,
   ComputedStatus,
+  ToggleableTalent,
 } from '../models/talent.model';
 import { truncateNumber } from './math.utils';
 
@@ -295,23 +296,27 @@ function createComputedStatus(args: {
 }
 
 function calculateProfit(
+  targetTalent: `${ToggleableTalent}`,
   talentName: keyof ComputedTalentSet,
   computedStatus: ComputedStatus
 ): number {
   const { talentSet } = computedStatus;
-  const { featherRestart } = talentSet;
+
+  // Target talent is the talent we want to level up and calculate the optimal talent levels for.
+  const targetTalentStatic = STATIC_TALENT[targetTalent];
+  const targetTalentInstance = talentSet[targetTalent];
 
   const talentStatic = STATIC_TALENT[talentName];
   const talentInstance = talentSet[talentName];
 
   const feathersPerSecond = calculateFeathersPerSecond(computedStatus);
-  const restartNextLevelCost = calculateNextLevelCost(
-    featherRestart.level,
-    STATIC_FEATHER_RESTART,
+  const targetNextLevelCost = calculateNextLevelCost(
+    targetTalentInstance.level,
+    targetTalentStatic,
     talentSet
   );
-  const restartNextLevelDuration = calculateDurationToReachCost(
-    restartNextLevelCost,
+  const targetNextLevelDuration = calculateDurationToReachCost(
+    targetNextLevelCost,
     feathersPerSecond
   );
   /**
@@ -335,13 +340,13 @@ function calculateProfit(
   talentInstance.level = talentInstance.level + 1;
 
   const feathersPerSecondAfter = calculateFeathersPerSecond(computedStatus);
-  const restartNextLevelCostAfter = calculateNextLevelCost(
-    featherRestart.level,
-    STATIC_FEATHER_RESTART,
+  const targetNextLevelCostAfter = calculateNextLevelCost(
+    targetTalentInstance.level,
+    targetTalentStatic,
     talentSet
   );
-  const restartNextLevelDurationAfter = calculateDurationToReachCost(
-    restartNextLevelCostAfter,
+  const targetNextLevelDurationAfter = calculateDurationToReachCost(
+    targetNextLevelCostAfter,
     feathersPerSecondAfter
   );
 
@@ -349,19 +354,22 @@ function calculateProfit(
 
   // Calculates the profit in percentages
   return (
-    (restartNextLevelDuration -
-      (restartNextLevelDurationAfter + nextLevelDuration)) /
-    restartNextLevelDuration
+    (targetNextLevelDuration -
+      (targetNextLevelDurationAfter + nextLevelDuration)) /
+    targetNextLevelDuration
   );
 }
 
-function getTheMostProfitableTalent(computedStatus: ComputedStatus): {
+function getTheMostProfitableTalent(
+  targetTalent: `${ToggleableTalent}`,
+  computedStatus: ComputedStatus
+): {
   talentName: keyof ComputedTalentSet;
   profit: number;
 } {
   const result = PASSIVE_TALENTS.map((talentName) => ({
     talentName,
-    profit: calculateProfit(talentName, computedStatus),
+    profit: calculateProfit(targetTalent, talentName, computedStatus),
   }))
     .sort(({ profit: profitA }, { profit: profitB }) => profitA - profitB)
     .pop();
@@ -376,14 +384,20 @@ function getTheMostProfitableTalent(computedStatus: ComputedStatus): {
 /**
  * impure
  */
-function calculateTalentLevels(computedStatus: ComputedStatus): ComputedStatus {
+function calculateTalentLevels(
+  targetTalent: `${ToggleableTalent}`,
+  computedStatus: ComputedStatus
+): ComputedStatus {
   let changesAreMade = true;
   let count = 0;
 
   while (changesAreMade) {
     changesAreMade = false;
 
-    const { talentName, profit } = getTheMostProfitableTalent(computedStatus);
+    const { talentName, profit } = getTheMostProfitableTalent(
+      targetTalent,
+      computedStatus
+    );
 
     // 0.01% minimum profit
     if (profit > 0.0001) {
@@ -416,10 +430,13 @@ function calculateTotalShinyFeathers(computedStatus: ComputedStatus): number {
 }
 
 function computeTalentsAndShinyFeathers(args: {
+  targetTalent: `${ToggleableTalent}`;
   bonusesOfOrionLevel: number;
   featherRestartLevel: number;
   theGreatMegaResetLevel: number;
 }): ComputedStatus {
+  const { targetTalent } = args;
+
   let computedStatus: ComputedStatus | undefined;
   let changesAreMade = true;
   let count = 0;
@@ -430,7 +447,7 @@ function computeTalentsAndShinyFeathers(args: {
 
     computedStatus = createComputedStatus({ totalShinyFeathers, ...args });
 
-    calculateTalentLevels(computedStatus);
+    calculateTalentLevels(targetTalent, computedStatus);
 
     const nextTotalShinyFeathers = calculateTotalShinyFeathers(computedStatus);
 
@@ -458,6 +475,7 @@ function computeTalentsAndShinyFeathers(args: {
 }
 
 export function computeStatus(args: {
+  targetTalent: `${ToggleableTalent}`;
   bonusesOfOrionLevel: number;
   featherRestartLevel: number;
   theGreatMegaResetLevel: number;

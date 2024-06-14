@@ -1,47 +1,63 @@
-@if (computedStatus(); as status) {
-  <div class="talent-cards">
-    <!-- row 1 -->
-    <!-- <div class="card-row"> -->
-    <talent-card
-      backgroundUrl="img/feather_generation_card.jpg"
-      [talent]="status.talentSet.featherGeneration" />
-    <talent-card
-      backgroundUrl="img/bonuses_of_orion_card.jpg"
-      [talent]="status.talentSet.bonusesOfOrion" />
-    <talent-card
-      backgroundUrl="img/feather_multiplier_card.jpg"
-      [talent]="status.talentSet.featherMultiplier" />
-    <!-- </div> -->
-    <!-- row 2 -->
-    <!-- <div class="card-row"> -->
-    <talent-card
-      backgroundUrl="img/feather_cheapener_card.jpg"
-      [talent]="status.talentSet.featherCheapener" />
-    <talent-card
-      backgroundUrl="img/feather_restart_card.jpg"
-      [talent]="status.talentSet.featherRestart"
-      [canChangeLevel]="true"
-      (levelChange)="featherRestartLevel.set($event)" />
-    <talent-card
-      backgroundUrl="img/super_feather_production_card.jpg"
-      [talent]="status.talentSet.superFeatherProduction" />
-    <!-- </div> -->
-    <!-- row 3 -->
-    <!-- <div class="card-row"> -->
-    <talent-card
-      backgroundUrl="img/shiny_feathers_card.jpg"
-      [talent]="status.talentSet.shinyFeathers"
-      [totalShinyFeathers]="status.totalShinyFeathers" />
-    <talent-card
-      backgroundUrl="img/super_feather_cheapener_card.jpg"
-      [talent]="status.talentSet.superFeatherCheapener" />
-    <talent-card
-      backgroundUrl="img/the_great_mega_reset_card.jpg"
-      [talent]="status.talentSet.theGreatMegaReset" />
-    <!-- </div> -->
-  </div>
+<div class="talent-toggle">
+  <div class="talent-toggle-label">Recommendations for:</div>
+  <mat-button-toggle-group
+    [hideSingleSelectionIndicator]="true"
+    [(value)]="targetTalent">
+    <mat-button-toggle value="featherRestart">
+      Feather Restart
+    </mat-button-toggle>
+    <mat-button-toggle value="theGreatMegaReset">
+      The Great Mega Reset
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
 
-  <div class="feathers-per-second">
-    Feathers/s: {{ status.feathersPerSecond }}
-  </div>
-}
+<div class="talent-cards">
+  <!-- row 1 -->
+  <talent-card
+    backgroundUrl="img/feather_generation_card.jpg"
+    [talent]="computedStatus().talentSet.featherGeneration" />
+  <talent-card
+    backgroundUrl="img/bonuses_of_orion_card.jpg"
+    [talent]="computedStatus().talentSet.bonusesOfOrion"
+    [canChangeLevel]="true"
+    [minLevel]="0"
+    [maxLevel]="40"
+    (levelChange)="bonusesOfOrionLevel.set($event)" />
+  <talent-card
+    backgroundUrl="img/feather_multiplier_card.jpg"
+    [talent]="computedStatus().talentSet.featherMultiplier" />
+  <!-- row 2 -->
+  <talent-card
+    backgroundUrl="img/feather_cheapener_card.jpg"
+    [talent]="computedStatus().talentSet.featherCheapener" />
+  <talent-card
+    backgroundUrl="img/feather_restart_card.jpg"
+    [talent]="computedStatus().talentSet.featherRestart"
+    [canChangeLevel]="true"
+    [minLevel]="20"
+    [maxLevel]="40"
+    (levelChange)="featherRestartLevel.set($event)" />
+  <talent-card
+    backgroundUrl="img/super_feather_production_card.jpg"
+    [talent]="computedStatus().talentSet.superFeatherProduction" />
+  <!-- row 3 -->
+  <talent-card
+    backgroundUrl="img/shiny_feathers_card.jpg"
+    [talent]="computedStatus().talentSet.shinyFeathers"
+    [totalShinyFeathers]="computedStatus().totalShinyFeathers" />
+  <talent-card
+    backgroundUrl="img/super_feather_cheapener_card.jpg"
+    [talent]="computedStatus().talentSet.superFeatherCheapener" />
+  <talent-card
+    backgroundUrl="img/the_great_mega_reset_card.jpg"
+    [talent]="computedStatus().talentSet.theGreatMegaReset"
+    [canChangeLevel]="true"
+    [minLevel]="10"
+    [maxLevel]="40"
+    (levelChange)="theGreatMegaResetLevel.set($event)" />
+</div>
+
+<div class="feathers-per-second">
+  Feathers/s: {{ computedStatus().feathersPerSecond }}
+</div>

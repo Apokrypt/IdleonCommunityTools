@@ -37,6 +37,7 @@ export class TalentCardComponent {
   >(null);
 
   readonly levelChange: OutputEmitterRef<number> = output<number>();
+  readonly toggleChange: OutputEmitterRef<boolean> = output<boolean>();
 
   protected changeLevelBy(value: number): void {
     const { level } = this.talent();
