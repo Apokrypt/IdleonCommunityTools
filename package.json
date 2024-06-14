@@ -6,6 +6,7 @@
     "name": "Apokrypt"
   },
   "description": "IdleOn tools made by the community member/s",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
