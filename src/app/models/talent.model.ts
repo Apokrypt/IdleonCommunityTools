@@ -35,4 +35,5 @@ export interface ComputedStatus {
 export enum ToggleableTalent {
   FeatherRestart = 'featherRestart',
   TheGreatMegaReset = 'theGreatMegaReset',
+  BonusesOfOrion = 'bonusesOfOrion',
 }
