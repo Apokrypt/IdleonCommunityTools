@@ -1,6 +1,6 @@
 {
   "name": "idleon-community-tool",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "main.js",
   "author": {
     "name": "Apokrypt"
@@ -15,8 +15,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "format": "npx prettier --write .",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "package": "electron-forge package --platform=win32",
+    "make": "electron-forge make --platform=win32"
   },
   "private": true,
   "dependencies": {
