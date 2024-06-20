@@ -12,6 +12,10 @@ const DAYS_IN_YEAR = 365;
 })
 export class DurationPipe implements PipeTransform {
   transform(duration: number): string {
+
+    if (duration < MS_IN_SECOND) {
+      return `< 1s`;
+    }
     const seconds = Math.ceil(duration / MS_IN_SECOND);
 
     if (seconds < SECONDS_IN_MINUTE) {
@@ -33,7 +37,7 @@ export class DurationPipe implements PipeTransform {
     const leftOverHours = hours % HOURS_IN_DAY;
 
     if (days < DAYS_IN_YEAR) {
-      return `${days}d ${leftOverHours}h`;
+      return `${days}d ${leftOverHours}h ${leftOverMinutes}min`;
     }
     const years = Math.floor(days / DAYS_IN_YEAR);
     const leftOverDays = days % DAYS_IN_YEAR;

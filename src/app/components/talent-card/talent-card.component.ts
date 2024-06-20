@@ -34,6 +34,7 @@ export class TalentCardComponent {
     input.required<ComputedTalent>();
   readonly backgroundUrl: InputSignal<string> = input.required<string>();
 
+  readonly totalSetupDuration: InputSignal<number> = input<number>(0);
   readonly canChangeLevel: InputSignal<boolean> = input<boolean>(false);
   readonly minLevel: InputSignal<number> = input<number>(20);
   readonly maxLevel: InputSignal<number> = input<number>(50);
@@ -51,6 +52,10 @@ export class TalentCardComponent {
   });
 
   readonly totalDuration: Signal<number> = computed(() => {
+    return this.totalSetupDuration() + this.talent().nextDuration;
+  });
+
+  readonly setupDuration: Signal<number> = computed(() => {
     return this.talent().prevDurations.reduce((acc, nxt) => acc + nxt, 0);
   });
 
