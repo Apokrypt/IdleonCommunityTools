@@ -83,6 +83,18 @@ export const STATIC_TALENT = {
   theGreatMegaReset: STATIC_THE_GREAT_MEGA_RESET,
 };
 
+export enum TalentName {
+  FeatherGeneration = 'featherGeneration',
+  BonusesOfOrion = 'bonusesOfOrion',
+  FeatherMultiplier = 'featherMultiplier',
+  FeatherCheapener = 'featherCheapener',
+  FeatherRestart = 'featherRestart',
+  SuperFeatherProduction = 'superFeatherProduction',
+  ShinyFeathers = 'shinyFeathers',
+  SuperFeatherCheapener = 'superFeatherCheapener',
+  TheGreatMegaReset = 'theGreatMegaReset',
+}
+
 export const ALL_TALENTS = [
   'featherGeneration',
   'bonusesOfOrion',
@@ -231,51 +243,60 @@ function createComputedTalentSet(args: {
 }): ComputedTalentSet {
   const { bonusesOfOrionLevel, featherRestartLevel, theGreatMegaResetLevel } =
     args;
-  const computedSet = {
+  const computedSet: ComputedTalentSet = {
     featherGeneration: {
       level: 1,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     bonusesOfOrion: {
       level: bonusesOfOrionLevel,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     featherMultiplier: {
       level: 0,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     featherCheapener: {
       level: 0,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     featherRestart: {
       level: featherRestartLevel,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     superFeatherProduction: {
       level: 0,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     shinyFeathers: {
       level: 0,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     superFeatherCheapener: {
       level: 0,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
     theGreatMegaReset: {
       level: theGreatMegaResetLevel,
       cost: '0',
-      duration: 0,
+      nextDuration: 0,
+      prevDurations: [],
     },
   };
   return computedSet;
@@ -299,7 +320,7 @@ function calculateProfit(
   targetTalent: `${ToggleableTalent}`,
   talentName: keyof ComputedTalentSet,
   computedStatus: ComputedStatus
-): number {
+): { profit: number, duration: number } {
   const { talentSet } = computedStatus;
 
   // Target talent is the talent we want to level up and calculate the optimal talent levels for.
@@ -353,31 +374,34 @@ function calculateProfit(
   talentInstance.level = talentInstance.level - 1;
 
   // Calculates the profit in percentages
-  return (
+  const profit = (
     (targetNextLevelDuration -
       (targetNextLevelDurationAfter + nextLevelDuration)) /
     targetNextLevelDuration
   );
+  return { profit, duration: nextLevelDuration };
 }
 
-function getTheMostProfitableTalent(
+function getTheCheapestProfitableTalent(
   targetTalent: `${ToggleableTalent}`,
-  computedStatus: ComputedStatus
+  computedStatus: ComputedStatus,
+  minimumProfit: number,
 ): {
   talentName: keyof ComputedTalentSet;
   profit: number;
-} {
-  const result = PASSIVE_TALENTS.map((talentName) => ({
-    talentName,
-    profit: calculateProfit(targetTalent, talentName, computedStatus),
-  }))
-    .sort(({ profit: profitA }, { profit: profitB }) => profitA - profitB)
-    .pop();
-  if (result === undefined) {
-    throw Error(
-      `something went wrong, couldn't find the most valueable talent`
+  duration: number;
+} | undefined {
+  const result = PASSIVE_TALENTS.map((talentName) => {
+    const { profit, duration } = calculateProfit(
+      targetTalent,
+      talentName,
+      computedStatus,
     );
-  }
+    return ({ talentName, profit, duration });
+  })
+    .filter(({ profit }) => profit >= minimumProfit)
+    .sort((a, b) => b.duration - a.duration)
+    .pop();
   return result;
 }
 
@@ -386,7 +410,8 @@ function getTheMostProfitableTalent(
  */
 function calculateTalentLevels(
   targetTalent: `${ToggleableTalent}`,
-  computedStatus: ComputedStatus
+  computedStatus: ComputedStatus,
+  minimumProfit: number,
 ): ComputedStatus {
   let changesAreMade = true;
   let count = 0;
@@ -394,15 +419,17 @@ function calculateTalentLevels(
   while (changesAreMade) {
     changesAreMade = false;
 
-    const { talentName, profit } = getTheMostProfitableTalent(
+    const cheapest = getTheCheapestProfitableTalent(
       targetTalent,
-      computedStatus
+      computedStatus,
+      minimumProfit,
     );
 
     // 0.01% minimum profit
-    if (profit > 0.0001) {
-      const talentInstance = computedStatus.talentSet[talentName];
+    if (cheapest !== undefined) {
+      const talentInstance = computedStatus.talentSet[cheapest.talentName];
       talentInstance.level = talentInstance.level + 1;
+      talentInstance.prevDurations.push(cheapest.duration);
       changesAreMade = true;
     }
     // failsafe
@@ -434,8 +461,9 @@ function computeTalentsAndShinyFeathers(args: {
   bonusesOfOrionLevel: number;
   featherRestartLevel: number;
   theGreatMegaResetLevel: number;
+  minimumProfit: number;
 }): ComputedStatus {
-  const { targetTalent } = args;
+  const { targetTalent, minimumProfit } = args;
 
   let computedStatus: ComputedStatus | undefined;
   let changesAreMade = true;
@@ -447,7 +475,7 @@ function computeTalentsAndShinyFeathers(args: {
 
     computedStatus = createComputedStatus({ totalShinyFeathers, ...args });
 
-    calculateTalentLevels(targetTalent, computedStatus);
+    calculateTalentLevels(targetTalent, computedStatus, minimumProfit);
 
     const nextTotalShinyFeathers = calculateTotalShinyFeathers(computedStatus);
 
@@ -479,6 +507,7 @@ export function computeStatus(args: {
   bonusesOfOrionLevel: number;
   featherRestartLevel: number;
   theGreatMegaResetLevel: number;
+  minimumProfit: number;
 }): ComputedStatus {
   const computedStatus = computeTalentsAndShinyFeathers(args);
 
@@ -497,7 +526,7 @@ export function computeStatus(args: {
       computedStatus.talentSet
     );
     talentInstance.cost = truncateNumber(cost);
-    talentInstance.duration = calculateDurationToReachCost(
+    talentInstance.nextDuration = calculateDurationToReachCost(
       cost,
       feathersPerSecond
     );

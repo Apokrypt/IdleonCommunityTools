@@ -11,7 +11,8 @@ export interface StaticTalent {
 export interface ComputedTalent {
   level: number;
   cost: string;
-  duration: number;
+  nextDuration: number;
+  prevDurations: number[];
 }
 
 export interface ComputedTalentSet {

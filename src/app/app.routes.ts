@@ -15,7 +15,7 @@ export const routes: Routes = [
   },
   // TODO: Remove
   {
-    path: '*',
-    redirectTo: '/farming-simulator',
+    path: '**',
+    redirectTo: '/owl-calculator',
   },
 ];

@@ -40,7 +40,11 @@
     </div>
     <div class="card-cost">Cost: {{ talent().cost }}</div>
     <div class="card-duration">
-      To next level: {{ talent().duration | duration }}
+      @if (isActiveTalent()) {
+        To next level: {{ talent().nextDuration | duration }}
+      } @else {
+        To reach: {{ totalDuration() | duration }}
+      }
     </div>
   </div>
 </div>

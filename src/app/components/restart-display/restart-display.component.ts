@@ -13,7 +13,6 @@ import { ComputedStatus, ToggleableTalent } from '../../models/talent.model';
 import { DurationPipe } from '../../pipes/duration';
 import { computeStatus } from '../../utils/talent.utils';
 import { TalentCardComponent } from '../talent-card';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
@@ -38,6 +37,9 @@ export class RestartDisplayComponent {
   readonly theGreatMegaResetLevel: WritableSignal<number> = signal<number>(20);
   readonly targetTalent: WritableSignal<`${ToggleableTalent}`> =
     signal<`${ToggleableTalent}`>(ToggleableTalent.FeatherRestart);
+  // in percentages, default 0.01%
+  readonly minimumProfit: WritableSignal<number> =
+    signal<number>(0.0001);
 
   readonly computedStatus: Signal<ComputedStatus> = computed(() => {
     return computeStatus({
@@ -45,6 +47,22 @@ export class RestartDisplayComponent {
       bonusesOfOrionLevel: this.bonusesOfOrionLevel(),
       featherRestartLevel: this.featherRestartLevel(),
       theGreatMegaResetLevel: this.theGreatMegaResetLevel(),
+      minimumProfit: this.minimumProfit(),
     });
+  });
+
+  readonly totalTalentSetupDuration: Signal<number> = computed(() => {
+    const { talentSet } = this.computedStatus();
+
+    const totalTalentSetupDurations: number[] = [];
+    totalTalentSetupDurations.push(
+      ...talentSet.featherGeneration.prevDurations,
+      ...talentSet.featherMultiplier.prevDurations,
+      ...talentSet.featherCheapener.prevDurations,
+      ...talentSet.superFeatherProduction.prevDurations,
+      ...talentSet.shinyFeathers.prevDurations,
+      ...talentSet.superFeatherCheapener.prevDurations,
+    );
+    return totalTalentSetupDurations.reduce((acc, nxt) => acc + nxt, 0);
   });
 }

@@ -15,13 +15,26 @@
   </mat-button-toggle-group>
 </div>
 
+<div class="minimum-profit-toggle">
+  <div class="minimum-profit-label">Minimum profit:</div>
+  <mat-button-toggle-group
+    [hideSingleSelectionIndicator]="true"
+    [(value)]="minimumProfit">
+    <mat-button-toggle [value]="0.0001">0.01%</mat-button-toggle>
+    <mat-button-toggle [value]="0.0005">0.05%</mat-button-toggle>
+    <mat-button-toggle [value]="0.001">0.1%</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
 <div class="talent-cards">
   <!-- row 1 -->
   <talent-card
     backgroundUrl="img/feather_generation_card.jpg"
+    talentName="featherGeneration"
     [talent]="computedStatus().talentSet.featherGeneration" />
   <talent-card
     backgroundUrl="img/bonuses_of_orion_card.jpg"
+    talentName="bonusesOfOrion"
     [talent]="computedStatus().talentSet.bonusesOfOrion"
     [canChangeLevel]="true"
     [minLevel]="0"
@@ -29,13 +42,16 @@
     (levelChange)="bonusesOfOrionLevel.set($event)" />
   <talent-card
     backgroundUrl="img/feather_multiplier_card.jpg"
+    talentName="featherMultiplier"
     [talent]="computedStatus().talentSet.featherMultiplier" />
   <!-- row 2 -->
   <talent-card
     backgroundUrl="img/feather_cheapener_card.jpg"
+    talentName="featherCheapener"
     [talent]="computedStatus().talentSet.featherCheapener" />
   <talent-card
     backgroundUrl="img/feather_restart_card.jpg"
+    talentName="featherRestart"
     [talent]="computedStatus().talentSet.featherRestart"
     [canChangeLevel]="true"
     [minLevel]="20"
@@ -43,17 +59,21 @@
     (levelChange)="featherRestartLevel.set($event)" />
   <talent-card
     backgroundUrl="img/super_feather_production_card.jpg"
+    talentName="superFeatherProduction"
     [talent]="computedStatus().talentSet.superFeatherProduction" />
   <!-- row 3 -->
   <talent-card
     backgroundUrl="img/shiny_feathers_card.jpg"
+    talentName="shinyFeathers"
     [talent]="computedStatus().talentSet.shinyFeathers"
     [totalShinyFeathers]="computedStatus().totalShinyFeathers" />
   <talent-card
     backgroundUrl="img/super_feather_cheapener_card.jpg"
+    talentName="superFeatherCheapener"
     [talent]="computedStatus().talentSet.superFeatherCheapener" />
   <talent-card
     backgroundUrl="img/the_great_mega_reset_card.jpg"
+    talentName="theGreatMegaReset"
     [talent]="computedStatus().talentSet.theGreatMegaReset"
     [canChangeLevel]="true"
     [minLevel]="10"
@@ -61,6 +81,13 @@
     (levelChange)="theGreatMegaResetLevel.set($event)" />
 </div>
 
-<div class="feathers-per-second">
-  Feathers/s: {{ computedStatus().feathersPerSecond }}
+<div class="common-status-container">
+
+  <div class="feathers-per-second">    
+    Feathers/s: {{ computedStatus().feathersPerSecond }}
+  </div>
+
+  <div class="total-talent-setup-duration">    
+    Total setup duration: ~{{ totalTalentSetupDuration() | duration }} (only calculates how long it takes to reach the cost)
+  </div>
 </div>
