@@ -190,13 +190,17 @@ function calculateShinyFeathersMultiplier(
  */
 function calculateFeathersPerSecond(computedStatus: ComputedStatus): number {
   const hasMapleMegaFeather = true;
-  const feathersPerSecond =
+  let feathersPerSecond =
     calculateBaseFeathersPerSecond(computedStatus.talentSet) *
     calculateFeatherRestartMultiplier(computedStatus.talentSet) *
     calculateFeatherMultiplierMultiplier(computedStatus.talentSet) *
     calculateShinyFeathersMultiplier(computedStatus);
   if (hasMapleMegaFeather) {
-    return feathersPerSecond * 10;
+    feathersPerSecond *= 10;
+  }
+  // Vault upgrade
+  if (true) {
+    feathersPerSecond *= 8.5;
   }
   return feathersPerSecond;
 }
@@ -320,7 +324,7 @@ function calculateProfit(
   targetTalent: `${ToggleableTalent}`,
   talentName: keyof ComputedTalentSet,
   computedStatus: ComputedStatus
-): { profit: number, duration: number } {
+): { profit: number; duration: number } {
   const { talentSet } = computedStatus;
 
   // Target talent is the talent we want to level up and calculate the optimal talent levels for.
@@ -374,30 +378,31 @@ function calculateProfit(
   talentInstance.level = talentInstance.level - 1;
 
   // Calculates the profit in percentages
-  const profit = (
+  const profit =
     (targetNextLevelDuration -
       (targetNextLevelDurationAfter + nextLevelDuration)) /
-    targetNextLevelDuration
-  );
+    targetNextLevelDuration;
   return { profit, duration: nextLevelDuration };
 }
 
 function getTheCheapestProfitableTalent(
   targetTalent: `${ToggleableTalent}`,
   computedStatus: ComputedStatus,
-  minimumProfit: number,
-): {
-  talentName: keyof ComputedTalentSet;
-  profit: number;
-  duration: number;
-} | undefined {
+  minimumProfit: number
+):
+  | {
+      talentName: keyof ComputedTalentSet;
+      profit: number;
+      duration: number;
+    }
+  | undefined {
   const result = PASSIVE_TALENTS.map((talentName) => {
     const { profit, duration } = calculateProfit(
       targetTalent,
       talentName,
-      computedStatus,
+      computedStatus
     );
-    return ({ talentName, profit, duration });
+    return { talentName, profit, duration };
   })
     .filter(({ profit }) => profit >= minimumProfit)
     .sort((a, b) => b.duration - a.duration)
@@ -411,7 +416,7 @@ function getTheCheapestProfitableTalent(
 function calculateTalentLevels(
   targetTalent: `${ToggleableTalent}`,
   computedStatus: ComputedStatus,
-  minimumProfit: number,
+  minimumProfit: number
 ): ComputedStatus {
   let changesAreMade = true;
   let count = 0;
@@ -422,7 +427,7 @@ function calculateTalentLevels(
     const cheapest = getTheCheapestProfitableTalent(
       targetTalent,
       computedStatus,
-      minimumProfit,
+      minimumProfit
     );
 
     // 0.01% minimum profit
